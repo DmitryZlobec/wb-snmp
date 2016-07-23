@@ -1,2 +1,2 @@
 # wb-snmp
-SNMP subaget for WirenBoard
+SNMP subagent for WirenBoard
