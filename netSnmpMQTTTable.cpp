@@ -156,7 +156,7 @@ void netSnmpMQTTTable::addUpdate(u_long idx, const char *nsMQTTName, const char 
 
     }
     /* then just do the update */
-    struct netSnmpMQTTTable_entry *entry = (struct netSnmpMQTTTable_entry *)row->data;
+    struct netSnmpMQTTTable_entry *entry = static_cast<struct netSnmpMQTTTable_entry *>(row->data);
 
     if (nsMQTTName) {
         strcpy(entry->nsMQTTName, nsMQTTName);
@@ -221,7 +221,7 @@ void netSnmpMQTTTable::addUpdateType(u_long idx,  const char *nsMQTTType, const 
 
     }
     /* then just do the update */
-    struct netSnmpMQTTTable_entry *entry = (struct netSnmpMQTTTable_entry *)row->data;
+    struct netSnmpMQTTTable_entry *entry = static_cast<struct netSnmpMQTTTable_entry *>(row->data);
 
 
     if (nsMQTTType) {
@@ -255,7 +255,7 @@ void netSnmpMQTTTable::addupdateOrder(u_long idx,  const char *nsMQTTOrder) {
     }
     /* then just do the update */
     struct netSnmpMQTTTable_entry *entry;
-    entry = (struct netSnmpMQTTTable_entry *)row->data;
+    entry = static_cast<struct netSnmpMQTTTable_entry *>(row->data);
 
     if (nsMQTTOrder) {
         entry->nsMQTTOrder = atol(nsMQTTOrder);
@@ -276,7 +276,7 @@ void netSnmpMQTTTable::addUpdateReadonly(u_long idx,  const char *nsMQTTReadonly
     }
     /* then just do the update */
     struct netSnmpMQTTTable_entry *entry;
-    entry = (struct netSnmpMQTTTable_entry *) row->data;
+    entry = static_cast<struct netSnmpMQTTTable_entry *>(row->data);
 
     if (nsMQTTReadonly) {
         entry->nsMQTTReadonly = atol(nsMQTTReadonly);
@@ -297,7 +297,7 @@ void netSnmpMQTTTable::addUpdateTs(u_long idx,  const char *nsMQTTTs) {
 
     }
     /* then just do the update */
-    struct netSnmpMQTTTable_entry *entry = (struct netSnmpMQTTTable_entry *)row->data;
+    struct netSnmpMQTTTable_entry *entry = static_cast<struct netSnmpMQTTTable_entry *>(row->data);
 
     if (nsMQTTTs) {
         entry->nsMQTTTs= (u_long)atol(nsMQTTTs);

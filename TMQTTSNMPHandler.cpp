@@ -66,6 +66,7 @@ void TMQTTSNMPHandler::OnMessage(const struct mosquitto_message *message) {
     }
 
     string rowName = tokens[2] + "/" + tokens[4];
+    //TODO Make good  cast
     unsigned long int sec = (unsigned long int)time(NULL);
 
     if (tokens[5] == "meta" && tokens[6] == "type") {
