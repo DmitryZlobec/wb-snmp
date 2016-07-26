@@ -26,13 +26,13 @@
 
 class TMQTTSNMPHandler  : public TMQTTWrapper {
 public:
-    TMQTTSNMPHandler(const TMQTTSNMPHandler::TConfig &config, netSnmpMQTT::netSnmpMQTTTable &netSnmpMQTTTable);
+    TMQTTSNMPHandler(const TMQTTSNMPHandler::TConfig &config, netSnmpMQTT::netSnmpMQTTTable *netSnmpMQTTTable);
     ~TMQTTSNMPHandler();
     void OnConnect(int rc);
     void OnMessage(const struct mosquitto_message *message);
     void OnSubscribe(int mid, int qos_count, const int *granted_qos);
 private:
-    netSnmpMQTT::netSnmpMQTTTable netSnmpTable;
+    netSnmpMQTT::netSnmpMQTTTable *netSnmpTable;
 };
 
 

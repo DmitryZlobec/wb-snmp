@@ -15,7 +15,7 @@ static u_long hashData(const char *str)
 }
 
 TMQTTSNMPHandler::TMQTTSNMPHandler(const TMQTTSNMPHandler::TConfig &config,
-                                   netSnmpMQTT::netSnmpMQTTTable &netSnmpMQTTTable) : TMQTTWrapper(config),netSnmpTable (netSnmpMQTTTable)
+                                   netSnmpMQTT::netSnmpMQTTTable *netSnmpMQTTTable) : TMQTTWrapper(config),netSnmpTable (netSnmpMQTTTable)
 {
 
     Connect();
@@ -70,25 +70,25 @@ void TMQTTSNMPHandler::OnMessage(const struct mosquitto_message *message) {
 
     if (tokens[5] == "meta" && tokens[6] == "type") {
 
-        netSnmpTable.addUpdateType(hashData(rowName.c_str()), rowName.c_str(), payload.c_str());
+        netSnmpTable->addUpdateType(hashData(rowName.c_str()), rowName.c_str(), payload.c_str());
         return;
     }
 
     if (tokens[5] == "meta" && tokens[6] == "order") {
 
-        netSnmpTable.addupdateOrder(hashData(rowName.c_str()), payload.c_str());
+        netSnmpTable->addupdateOrder(hashData(rowName.c_str()), payload.c_str());
         return;
     }
 
     if (tokens[5] == "meta" && tokens[6] == "readonly") {
 
-        netSnmpTable.addUpdateReadonly(hashData(rowName.c_str()), payload.c_str());
+        netSnmpTable->addUpdateReadonly(hashData(rowName.c_str()), payload.c_str());
         return;
     }
 
     if (tokens[5] == "meta" && tokens[6] == "ts") {
 
-        netSnmpTable.addUpdateTs(hashData(rowName.c_str()), payload.c_str());
+        netSnmpTable->addUpdateTs(hashData(rowName.c_str()), payload.c_str());
         return;
     }
     if (tokens[3] == "controls" && tokens.size() == 5) {
@@ -96,7 +96,7 @@ void TMQTTSNMPHandler::OnMessage(const struct mosquitto_message *message) {
         ss << sec;
         std::string ts = ss.str();
         DEBUGMSGTL(("snmp-mqtt-wb", "Create/Update row: %s with value1: %s, timestamp: %d\n",rowName, payload, sec));
-        netSnmpTable.addUpdate(hashData(rowName.c_str()),rowName.c_str(), payload.c_str(), ts.c_str());
+        netSnmpTable->addUpdate(hashData(rowName.c_str()),rowName.c_str(), payload.c_str(), ts.c_str());
         return;
     }
 }
@@ -104,4 +104,10 @@ void TMQTTSNMPHandler::OnMessage(const struct mosquitto_message *message) {
 TMQTTSNMPHandler::~TMQTTSNMPHandler() {
 
 }
+
+
+
+
+
+
 
