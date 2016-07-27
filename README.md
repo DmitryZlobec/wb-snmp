@@ -1,6 +1,8 @@
 # wb-snmp
+
 SNMP subaget for WirenBoard
-snmptable -c public -v2c localhost NET-SNMP-WB-NNM::netSnmpMQTTTable
+
+#snmptable -c public -v2c localhost NET-SNMP-WB-NNM::netSnmpMQTTTable
 
 The table structure:
 
