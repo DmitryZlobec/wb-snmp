@@ -1,0 +1,156 @@
+NET-SNMP-WB-NNM DEFINITIONS ::= BEGIN
+
+--
+-- MIB objects for agent module of WirenBoard
+--
+
+IMPORTS
+    MODULE-IDENTITY, OBJECT-TYPE, Integer32,Unsigned32,
+    NOTIFICATION-TYPE                       FROM SNMPv2-SMI
+    SnmpAdminString                         FROM SNMP-FRAMEWORK-MIB
+    netSnmp                                 FROM NET-SNMP-MIB
+    RowStatus, StorageType                  FROM SNMPv2-TC
+;
+
+netSnmpWb MODULE-IDENTITY
+    LAST-UPDATED "201607150000Z"
+    ORGANIZATION "None"
+    CONTACT-INFO    
+	 "postal:   Black Sea
+
+          email:    zlobec@gmail.com"
+    DESCRIPTION
+	"MQTT MIB objects for agent module WirenBoards"
+    REVISION     "200406150000Z"
+    DESCRIPTION
+	"Corrected notification  definitions"
+    REVISION     "200202060000Z"
+    DESCRIPTION
+	"First draft"
+    ::= { netSnmp 9997 }
+
+--
+-- top level structure
+--
+netSnmpWbTables        OBJECT IDENTIFIER ::= { netSnmpWb 1 }
+
+
+
+
+--
+--  Tables
+--
+
+netSnmpMQTTTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF NetSnmpMQTTEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+	"This table merely contains a set of data from MQTT"
+    ::= { netSnmpWbTables 1 }
+
+netSnmpMQTTEntry OBJECT-TYPE
+    SYNTAX      NetSnmpMQTTEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+	"A row describing a device"
+    INDEX   { nsMQTTIndex }
+    ::= {netSnmpMQTTTable 1 }
+
+NetSnmpMQTTEntry ::= SEQUENCE {
+	nsMQTTIndex	Unsigned32,
+	nsMQTTName	OCTET STRING,
+	nsMQTTValue	OCTET STRING,
+	nsMQTTDValue	OCTET INTEGER,
+	nsMQTTDPow	OCTET INTEGER,
+	nsMQTTType	OCTET STRING
+	nsMQTTReadonly	OCTET INTEGER,
+	nsMQTTOrder	OCTET INTEGER,
+	nsMQTTTs	OCTET Counter32,
+	nsMQTTTOC	OCTET Counter32
+
+}
+
+nsMQTTIndex OBJECT-TYPE
+    SYNTAX      Unsigned32 (1..4294967295)
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+	"Index"
+    ::= { netSnmpMQTTEntry 1 }
+
+nsMQTTName OBJECT-TYPE
+    SYNTAX      OCTET STRING
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+	"Device name."
+    ::= { netSnmpMQTTEntry 2 }
+
+nsMQTTValue OBJECT-TYPE
+    SYNTAX      OCTET STRING
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+	"Topic value."
+    ::= { netSnmpMQTTEntry 3 }
+
+nsMQTTDValue OBJECT-TYPE
+    SYNTAX      INTEGER
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+	"Topic value."
+    ::= { netSnmpMQTTEntry 4 }
+
+nsMQTTDPow OBJECT-TYPE
+    SYNTAX      INTEGER
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+	"Topic value."
+    ::= { netSnmpMQTTEntry 5 }
+
+nsMQTTType OBJECT-TYPE
+    SYNTAX      OCTET STRING
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+	"Value type."
+    ::= { netSnmpMQTTEntry 6 }
+
+nsMQTTReadonly OBJECT-TYPE
+    SYNTAX      INTEGER
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+	"Readonly flag."
+    ::= { netSnmpMQTTEntry 7 }
+
+nsMQTTOrder OBJECT-TYPE
+    SYNTAX      INTEGER
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+	"Order."
+    ::= { netSnmpMQTTEntry 8 }
+
+nsMQTTTs OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+	"Time Stamp."
+    ::= { netSnmpMQTTEntry 9 }
+
+nsMQTTTOC OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+	"Time of change."
+    ::= { netSnmpMQTTEntry 10 }
+
+
+END

@@ -1,0 +1,72 @@
+#! /bin/sh -e
+### BEGIN INIT INFO
+# Provides:           wb-snmp
+# Required-Start:     $network $remote_fs $syslog
+# Required-Stop:      $network $remote_fs $syslog
+# Default-Start:      2 3 4 5
+# Default-Stop:       0 1 6
+# Short-Description:  SNMP WB subagent
+# Description:        Wirenboard NET SNMP (Simple Network Management Protocol) Subagent
+### END INIT INFO
+#
+# Author:    Dmitry Petrenko <zlobec@gmail.com>
+#
+set -e
+
+. /lib/lsb/init-functions
+
+export PATH=/sbin:/usr/sbin:/bin:/usr/bin
+
+
+# Defaults
+export MIBDIRS=/usr/share/mibs/site:/usr/share/snmp/mibs:/usr/share/mibs/iana:/usr/share/mibs/ietf:/usr/share/mibs/netsnmp
+SNMPDRUN=yes
+
+
+# Cd to / before starting any daemons.
+cd /
+
+
+case "$1" in
+  start)
+    echo -n "Starting network management services:"
+    if [ "$SNMPDRUN" = "yes" -a -f /etc/snmp/snmpd.conf ]; then
+	start-stop-daemon --quiet --start --oknodo --exec /usr/sbin/wb_snmp
+	echo -n " wb-snmp"
+    fi
+    echo "."
+    ;;
+  stop)
+    echo -n "Stopping network management services:"
+    start-stop-daemon --quiet --stop --oknodo --exec /usr/sbin/wb_snmp
+    echo -n " wb-snmp"
+    echo "."
+    ;;
+  restart)
+    echo -n "Restarting network management services:"
+    start-stop-daemon --quiet --stop --oknodo --exec /usr/sbin/wb_snmp
+    # Allow the daemons time to exit completely.
+    sleep 2
+    if [ "$SNMPDRUN" = "yes" -a -f /etc/snmp/snmpd.conf ]; then
+	start-stop-daemon --quiet --start --exec /usr/sbin/wb_snmp
+	echo -n "wb-snmp"
+    fi
+    echo "."
+    ;;
+  reload|force-reload)
+    echo -n "Reloading network management services:"
+    echo "."
+    ;;
+  status)
+    status=0
+    if [ "$SNMPDRUN" = "yes" -a -f /etc/snmp/snmpd.conf ]; then
+    	status_of_proc /usr/sbin/wb_snmp wb_snmp || status=$?
+    fi
+    exit $status
+    ;;
+  *)
+    echo "Usage: /etc/init.d/wb-snmp {start|stop|restart|reload|force-reload|status}"
+    exit 1
+esac
+
+exit 0

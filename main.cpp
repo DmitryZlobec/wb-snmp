@@ -12,7 +12,7 @@
 #include <iostream>
 #include "netSnmpMQTTTable.h"
 #include "TMQTTSNMPHandler.h"
-#include "wb-snmp.h"
+
 
 
 static int keep_running;
@@ -77,15 +77,12 @@ main(int argc, char **argv) {
 				use_syslog = 0; /* use stderr */
 				break;
 			case 'x':
-				agentx_socket = "udp:localhost:705";
+				agentx_socket = const_cast< char*>("udp:localhost:705");
 				break;
 			default:
 				fprintf(stderr, "unknown option %c\n", ch);
 				usage();
 		}
-    dont_fork = 1;
-    snmp_set_do_debugging(0);
-    debug_register_tokens("snmpd/main,snmp-mqtt-wb");
 
    // use_syslog = 1;
 	if (optind < argc) {
