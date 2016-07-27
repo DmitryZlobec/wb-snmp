@@ -77,13 +77,17 @@ main(int argc, char **argv) {
 				use_syslog = 0; /* use stderr */
 				break;
 			case 'x':
-				agentx_socket = optarg;
+				agentx_socket = "udp:localhost:705";
 				break;
 			default:
 				fprintf(stderr, "unknown option %c\n", ch);
 				usage();
 		}
+    dont_fork = 1;
+    snmp_set_do_debugging(0);
+    debug_register_tokens("snmpd/main,snmp-mqtt-wb");
 
+   // use_syslog = 1;
 	if (optind < argc) {
 		int i;
 		/*
@@ -187,15 +191,18 @@ main(int argc, char **argv) {
     mqtt_handler->Init();
 
 
+    int rc=0;
     /*
      * you're main loop here...
      */
-    int rc= mqtt_handler->loop_start();
+    //mqtt_handler->loop_start();
     if (rc != 0 ) {
         cerr << "couldn't start mosquitto_loop_start ! " << rc << endl;
     } else {
         while (keep_running) {
-            mqtt_handler->loop(50,1);
+           rc =  mqtt_handler->loop(50,1);
+            if (rc != 0)
+                mqtt_handler->reconnect();
             agent_check_and_process(0); /* 0 == don't block */
         }
         mqtt_handler->loop_stop();

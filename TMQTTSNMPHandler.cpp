@@ -18,6 +18,7 @@ TMQTTSNMPHandler::TMQTTSNMPHandler(const TMQTTSNMPHandler::TConfig &config,
                                    netSnmpMQTT::netSnmpMQTTTable *netSnmpMQTTTable) : TMQTTWrapper(config),netSnmpTable (netSnmpMQTTTable)
 {
 
+
     Connect();
 
 }
@@ -27,19 +28,22 @@ TMQTTSNMPHandler::TMQTTSNMPHandler(const TMQTTSNMPHandler::TConfig &config,
 
 void TMQTTSNMPHandler::OnConnect(int rc) {
 
+
+    Subscribe(NULL, "/devices/#");
     DEBUGMSGTL(("verbose", "Connected with code: %d\n", rc));
 
-    if(rc == 0) {
-        string prefix = string("/devices/") + MQTTConfig.Id + "/";
+  //  if(rc == 0) {
+  //      string prefix = string("/devices/") + MQTTConfig.Id + "/";
         // Meta
-        Publish(NULL, prefix + "meta/name", "SNMP", 0, false);
-    }
+  //      Publish(NULL, prefix + "meta/name", "SNMP", 0, false);
+  //  }
 
 }
 
 void TMQTTSNMPHandler::OnSubscribe(int mid, int qos_count, const int *granted_qos) {
 
     DEBUGMSGTL(("verbose", "Subscription succeeded.\n"));
+
 
 }
 
@@ -50,6 +54,8 @@ void TMQTTSNMPHandler::OnMessage(const struct mosquitto_message *message) {
 
 
     const vector<string>& tokens = StringSplit(topic, '/');
+
+    cout << topic << endl;
     if (tokens.size() < 5) {
 
         DEBUGMSGTL(("snmp-mqtt-wb", "not enough topic sections to care: %s is %d\n", topic, tokens.size()));

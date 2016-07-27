@@ -4,6 +4,7 @@
 
 #include "netSnmpMQTTTable.h"
 #include "netSnmpMQTTTable_entry.h"
+#include <iostream>
 
 
 
@@ -19,6 +20,7 @@ int   handler(
 
 
 {
+
    return  tbl->netSnmpMQTTTable_handler(handler, reginfo, reqinfo, requests);
 
 }
