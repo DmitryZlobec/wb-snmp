@@ -47,7 +47,7 @@ namespace netSnmpMQTT {
                 netsnmp_agent_request_info *reqinfo,
                 netsnmp_request_info *requests);
 
-        void remove(long idx);
+
 
         void add(netsnmp_tdata_row *row, u_long idx, const char *nsMQTTName = "Noname", const char *nsMQTTValue = "0",
                  long nsMQTTDValue = 0, long nsMQTTDPow = 0, const char *nsMQTTType = "value", long nsMQTTReadonly = 1,

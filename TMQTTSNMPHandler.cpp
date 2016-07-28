@@ -3,16 +3,24 @@
 //
 
 #include "TMQTTSNMPHandler.h"
-static u_long hashData(const char *str)
+
+#define A 54059 /* a prime */
+#define B 76963 /* another prime */
+#define C 86969 /* yet another prime */
+
+// https://en.wikipedia.org/wiki/B%C3%A9zout's_identity
+unsigned hashData(const char* s)
 {
-    u_long hash = 5381;
-    int c;
-    while (c=*str++)
-        hash =((hash << 5) + hash) + c;
-
-    return hash;
-
+    unsigned h = 31 /* also prime */;
+    while (*s) {
+        h = (h * A) ^ (s[0] * B);
+        s++;
+    }
+    return h; // or return h % C;
 }
+
+
+
 
 TMQTTSNMPHandler::TMQTTSNMPHandler(const TMQTTSNMPHandler::TConfig &config,
                                    netSnmpMQTT::netSnmpMQTTTable *netSnmpMQTTTable) : TMQTTWrapper(config),netSnmpTable (netSnmpMQTTTable)
