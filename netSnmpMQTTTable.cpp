@@ -55,10 +55,10 @@ netsnmp_tdata_row *netSnmpMQTTTable::_find_row(u_long idx) {
 void netSnmpMQTTTable::remove( u_long idx) {
     netsnmp_tdata_row *row = _find_row( idx);
     if (row) {
-        DEBUGMSGTL(("verbose", "Found row with idx, deleting it: %d\n", idx));
+        DEBUGMSGTL(("verbose", "Found row with idx, deleting it: %lu\n", idx));
         removeEntry( row);
     } else {
-        DEBUGMSGTL(("verbose", "No row found with idx: %d\n", idx));
+        DEBUGMSGTL(("verbose", "No row found with idx: %lu\n", idx));
     }
 }
 
@@ -79,7 +79,7 @@ netsnmp_tdata_row *netSnmpMQTTTable::createEntry(long nsMQTTIndex) {
     }
     row->data = entry;
 
-    DEBUGMSGT(("netSnmpMQTTTable:entry:create", "row 0x%x\n", (uintptr_t)row));
+    DEBUGMSGT(("netSnmpMQTTTable:entry:create", "row 0x%lx\n", (uintptr_t)row));
     entry->nsMQTTIndex = nsMQTTIndex;
     netsnmp_tdata_row_add_index( row, ASN_UNSIGNED,
                                  &(entry->nsMQTTIndex),
@@ -96,7 +96,7 @@ void netSnmpMQTTTable::removeEntry(netsnmp_tdata_row *row) {
     if (!row)
         return;    /* Nothing to remove */
 
-    DEBUGMSGT(("netSnmpMQTTTable:entry:remove", "row 0x%x\n", (uintptr_t)row));
+    DEBUGMSGT(("netSnmpMQTTTable:entry:remove", "row 0x%lx\n", (uintptr_t)row));
 
     entry = (struct netSnmpMQTTTable_entry *)row->data;
     SNMP_FREE( entry );   /* XXX - release any other internal resources */

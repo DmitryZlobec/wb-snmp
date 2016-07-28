@@ -58,7 +58,7 @@ void TMQTTSNMPHandler::OnMessage(const struct mosquitto_message *message) {
     cout << topic << endl;
     if (tokens.size() < 5) {
 
-        DEBUGMSGTL(("snmp-mqtt-wb", "not enough topic sections to care: %s is %d\n", topic, tokens.size()));
+        DEBUGMSGTL(("snmp-mqtt-wb", "not enough topic sections to care: %s is %zd\n", topic.c_str(), tokens.size()));
         return;
 
     }
@@ -66,7 +66,7 @@ void TMQTTSNMPHandler::OnMessage(const struct mosquitto_message *message) {
     if ( tokens[1] != "devices" || tokens[0] != "")
     {
 
-        DEBUGMSGTL(("snmp-mqtt-wb", "no devices topic: %s \n", topic));
+        DEBUGMSGTL(("snmp-mqtt-wb", "no devices topic: %s \n", topic.c_str()));
         return;
 
     }
@@ -74,35 +74,26 @@ void TMQTTSNMPHandler::OnMessage(const struct mosquitto_message *message) {
     string rowName = tokens[2] + "/" + tokens[4];
     //TODO Make good  cast
     unsigned long int sec = (unsigned long int)time(NULL);
-
-    if (tokens[5] == "meta" && tokens[6] == "type") {
-
-        netSnmpTable->addUpdateType(hashData(rowName.c_str()), rowName.c_str(), payload.c_str());
-        return;
-    }
-
-    if (tokens[5] == "meta" && tokens[6] == "order") {
-
-        netSnmpTable->addupdateOrder(hashData(rowName.c_str()), payload.c_str());
-        return;
-    }
-
-    if (tokens[5] == "meta" && tokens[6] == "readonly") {
-
-        netSnmpTable->addUpdateReadonly(hashData(rowName.c_str()), payload.c_str());
-        return;
-    }
-
-    if (tokens[5] == "meta" && tokens[6] == "ts") {
-
-        netSnmpTable->addUpdateTs(hashData(rowName.c_str()), payload.c_str());
-        return;
+    if ((tokens.size() > 5) && (tokens[5] == "meta")) {
+        if (tokens[6] == "type") {
+            netSnmpTable->addUpdateType(hashData(rowName.c_str()), payload.c_str(), rowName.c_str());
+            return;
+        } else  if (tokens[6] == "order") {
+            netSnmpTable->addupdateOrder(hashData(rowName.c_str()), payload.c_str());
+            return;
+        } else if (tokens[6] == "readonly") {
+            netSnmpTable->addUpdateReadonly(hashData(rowName.c_str()), payload.c_str());
+            return;
+        } else if (tokens[6] == "ts") {
+            netSnmpTable->addUpdateTs(hashData(rowName.c_str()), payload.c_str());
+            return;
+        }
     }
     if (tokens[3] == "controls" && tokens.size() == 5) {
         std::stringstream ss;
         ss << sec;
         std::string ts = ss.str();
-        DEBUGMSGTL(("snmp-mqtt-wb", "Create/Update row: %s with value1: %s, timestamp: %d\n",rowName, payload, sec));
+        DEBUGMSGTL(("snmp-mqtt-wb", "Create/Update row: %s with value1: %s, timestamp: %lu\n",rowName.c_str(), payload.c_str(), sec));
         netSnmpTable->addUpdate(hashData(rowName.c_str()),rowName.c_str(), payload.c_str(), ts.c_str());
         return;
     }

@@ -50,7 +50,7 @@ namespace netSnmpMQTT {
         void remove(long idx);
 
         void add(netsnmp_tdata_row *row, u_long idx, const char *nsMQTTName = "Noname", const char *nsMQTTValue = "0",
-                 long nsMQTTDValue = 0, long nsMQTTDPow = 0, const char *nsMQTTType = "range", long nsMQTTReadonly = 1,
+                 long nsMQTTDValue = 0, long nsMQTTDPow = 0, const char *nsMQTTType = "value", long nsMQTTReadonly = 1,
                  long nsMQTTOrder = 0, u_long nsMQTTTs = 0, u_long nsMQTTTOC = 0);
 
         void addUpdate(u_long idx, const char *nsMQTTName, const char *nsMQTTValue, const char *nsMQTTTOC);
