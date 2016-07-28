@@ -197,10 +197,10 @@ main(int argc, char **argv) {
         cerr << "couldn't start mosquitto_loop_start ! " << rc << endl;
     } else {
         while (keep_running) {
-           rc =  mqtt_handler->loop(50,1);
+           rc =  mqtt_handler->loop(/* timeout ms */ 20, /* max packets */ 1);
             if (rc != 0)
                 mqtt_handler->reconnect();
-            agent_check_and_process(0); /* 0 == don't block */
+            	agent_check_and_process(0); /* 0 == don't block */
         }
         mqtt_handler->loop_stop();
     }
