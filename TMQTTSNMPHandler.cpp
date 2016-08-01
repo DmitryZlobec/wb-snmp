@@ -63,7 +63,6 @@ void TMQTTSNMPHandler::OnMessage(const struct mosquitto_message *message) {
 
     const vector<string>& tokens = StringSplit(topic, '/');
 
-    cout << topic << endl;
     if (tokens.size() < 5) {
 
         DEBUGMSGTL(("snmp-mqtt-wb", "not enough topic sections to care: %s is %zd\n", topic.c_str(), tokens.size()));

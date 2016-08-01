@@ -1,16 +1,16 @@
-//
-// Created by zlobec on 24.07.16.
-//
+// // Created by zlobec on 24.07.16. //
 
 #include "netSnmpMQTTTable.h"
 #include "netSnmpMQTTTable_entry.h"
-
+#include <math.h>
 extern Netsnmp_Node_Handler handler;
 using namespace netSnmpMQTT;
 netSnmpMQTTTable *tbl;
 netSnmpMQTTTable::netSnmpMQTTTable() {
 
     tbl = this;
+        netSnmpMQTTTable_oid = const_cast<oid*>(g_netSnmpMQTTTable_oid);
+        netSnmpMQTTTable_oid_len = OID_LENGTH(g_netSnmpMQTTTable_oid);
 
      reg = netsnmp_create_handler_registration(
             "netSnmpMQTTTable",   handler,

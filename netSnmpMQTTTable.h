@@ -8,8 +8,7 @@
 #include <net-snmp/net-snmp-config.h>
 #include <net-snmp/net-snmp-includes.h>
 #include <net-snmp/agent/net-snmp-agent-includes.h>
-#include <math.h>
-// column number definitions for table netSnmpMQTTTable
+
 #define COLUMN_NSMQTTINDEX        1
 #define COLUMN_NSMQTTNAME        2
 #define COLUMN_NSMQTTVALUE        3
@@ -22,12 +21,20 @@
 #define COLUMN_NSMQTTTOC        10
 
 
+
+const oid g_netSnmpMQTTTable_oid[10] = {1, 3, 6, 1, 4, 1, 8072, 9997, 1, 1};
+const size_t g_netSnmpMQTTTable_oid_len = OID_LENGTH(g_netSnmpMQTTTable_oid);
+
 namespace netSnmpMQTT {
 
 
     class netSnmpMQTTTable {
-        const oid netSnmpMQTTTable_oid[10] = {1, 3, 6, 1, 4, 1, 8072, 9997, 1, 1};
-        const size_t netSnmpMQTTTable_oid_len = OID_LENGTH(netSnmpMQTTTable_oid);
+
+//        const oid netSnmpMQTTTable_oid[10] = {1, 3, 6, 1, 4, 1, 8072, 9997, 1, 1};
+//        const size_t netSnmpMQTTTable_oid_len = OID_LENGTH(netSnmpMQTTTable_oid);
+        oid *netSnmpMQTTTable_oid;
+        size_t netSnmpMQTTTable_oid_len;
+
         netsnmp_handler_registration *reg;
         netsnmp_tdata *table_data;
         netsnmp_table_registration_info *table_info;

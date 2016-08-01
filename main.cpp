@@ -21,6 +21,8 @@ static RETSIGTYPE stop_server(int a) {
 	keep_running = 0;
 }
 
+
+
 static void usage(void) {
     std::cout << "usage: netSnmpIETFWGTable [-D<tokens>] [-f] [-L] [-M] [-H] [LISTENING ADDRESSES]" << std::endl
 		<< "\t-f      Do not fork() from the calling shell." << std::endl
@@ -157,10 +159,7 @@ main(int argc, char **argv) {
 	/*
 	 * init netSnmpMQTTTable
 	 */
-    snmpMQTTTable = new netSnmpMQTT::netSnmpMQTTTable();
-	/*
-	 * read netSnmpIETFWGTable.conf files. 
-	 */
+    	snmpMQTTTable = new netSnmpMQTT::netSnmpMQTTTable();
 	init_snmp("netSnmpMQTTTable");
 
 	/*
@@ -192,17 +191,30 @@ main(int argc, char **argv) {
     /*
      * you're main loop here...
      */
-    //mqtt_handler->loop_start();
     if (rc != 0 ) {
         cerr << "couldn't start mosquitto_loop_start ! " << rc << endl;
     } else {
-        while (keep_running) {
-           rc =  mqtt_handler->loop(/* timeout ms */ 20, /* max packets */ 1);
-            if (rc != 0)
-                mqtt_handler->reconnect();
-            	agent_check_and_process(0); /* 0 == don't block */
-        }
-        mqtt_handler->loop_stop();
+
+    thread mqttThread([&]() {
+	while (keep_running) {
+               int rc =  mqtt_handler->loop(50,1);
+		if (rc != 0) {
+		        mqtt_handler->reconnect();
+		}
+	}
+    });
+
+    thread snmpThread([&]() {
+	while (keep_running) {
+        		agent_check_and_process(0); /* 0 == don't block */
+			std::this_thread::sleep_for(std::chrono::milliseconds(300));
+	}
+    });
+
+    mqttThread.join();
+    snmpThread.join();
+    mqtt_handler->loop_stop();
+    
     }
 
     mosqpp::lib_cleanup();
