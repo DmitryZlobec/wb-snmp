@@ -206,8 +206,8 @@ main(int argc, char **argv) {
 
     thread snmpThread([&]() {
 	while (keep_running) {
-        		agent_check_and_process(0); /* 0 == don't block */
-			std::this_thread::sleep_for(std::chrono::milliseconds(300));
+        		agent_check_and_process(1); /* 0 == don't block */
+//			std::this_thread::sleep_for(std::chrono::milliseconds(10));
 	}
     });
 

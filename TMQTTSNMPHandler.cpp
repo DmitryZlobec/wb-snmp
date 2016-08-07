@@ -58,7 +58,7 @@ void TMQTTSNMPHandler::OnSubscribe(int mid, int qos_count, const int *granted_qo
 void TMQTTSNMPHandler::OnMessage(const struct mosquitto_message *message) {
 
     string topic = message->topic;
-    string payload = static_cast<const char *>(message->payload);
+    string payload = std::string(message->payload ? message->payload : "");
 
 
     const vector<string>& tokens = StringSplit(topic, '/');
