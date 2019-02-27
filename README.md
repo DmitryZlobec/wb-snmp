@@ -1,6 +1,6 @@
 # wb-snmp
 
-SNMP subaget for WirenBoard
+MQTT SNMP subaget for WirenBoard
 
 (root)> snmptable -c public -v2c localhost NET-SNMP-WB-NNM::netSnmpMQTTTable
 
